@@ -26,22 +26,11 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [scrapedData, setScrapedData] = useState<ScrapedData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Debug logging
-  const setScrapedDataWithLog = (data: ScrapedData | null) => {
-    console.log("DataContext: setScrapedData called with:", data);
-    setScrapedData(data);
-  };
-
-  const setIsLoadingWithLog = (loading: boolean) => {
-    console.log("DataContext: setIsLoading called with:", loading);
-    setIsLoading(loading);
-  };
-
   const value = {
     scrapedData,
-    setScrapedData: setScrapedDataWithLog,
+    setScrapedData,
     isLoading,
-    setIsLoading: setIsLoadingWithLog,
+    setIsLoading,
   };
 
   return (

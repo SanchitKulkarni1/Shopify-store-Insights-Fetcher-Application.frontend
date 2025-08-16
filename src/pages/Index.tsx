@@ -7,9 +7,7 @@ import { PoliciesSection } from "@/components/PoliciesSection";
 import { FAQsSection } from "@/components/FAQsSection";
 import { AboutSection } from "@/components/AboutSection";
 import { ImportantLinks } from "@/components/ImportantLinks";
-import { DataDisplayDemo } from "@/components/DataDisplayDemo";
-import { DataDebugger } from "@/components/DataDebugger";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+
 import { useToast } from "@/hooks/use-toast";
 import { ScrapedData } from "@/types";
 import { useData } from "@/contexts/DataContext";
@@ -22,8 +20,6 @@ const Index = () => {
   const handleScrapeSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      console.log("Index page received data:", data);
-      
       // Validate that we have the required data structure
       if (!data || typeof data !== 'object') {
         throw new Error("Invalid data structure received");
@@ -31,11 +27,9 @@ const Index = () => {
       
       // Check if this looks like our expected data structure
       if (!data.brand_name && !data.is_shopify) {
-        console.warn("Data doesn't match expected structure:", data);
         // Try to find the data in different possible locations
         const possibleData = data.data || data.result || data.insights || data;
         if (possibleData && typeof possibleData === 'object') {
-          console.log("Found data in alternative location:", possibleData);
           setScrapedData(possibleData);
         } else {
           throw new Error("Could not find valid store data in response");
@@ -49,7 +43,6 @@ const Index = () => {
         description: "Store data extracted successfully",
       });
     } catch (error: any) {
-      console.error("Error processing scraped data:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to analyze store. Please try again.",
@@ -71,70 +64,62 @@ const Index = () => {
 
       {/* Results Section */}
       {scrapedData && (
-        <ErrorBoundary>
-          <div className="container mx-auto px-4 py-12 space-y-8">
-            {/* Data Debugger - Shows exactly what data was received */}
-            <DataDebugger />
+        <div className="container mx-auto px-4 py-12 space-y-8">
+          {/* Store Overview */}
+          <StoreOverview data={scrapedData} />
 
-            {/* Data Access Demo - Shows how to access data from any component */}
-            <DataDisplayDemo />
+          {/* Hero Products */}
+          {scrapedData.hero_products && Array.isArray(scrapedData.hero_products) && scrapedData.hero_products.length > 0 && (
+            <ProductCatalog 
+              products={scrapedData.hero_products} 
+              title="Featured Products" 
+            />
+          )}
 
-            {/* Store Overview */}
-            <StoreOverview data={scrapedData} />
+          {/* Product Catalog */}
+          {scrapedData.product_catalog && Array.isArray(scrapedData.product_catalog) && scrapedData.product_catalog.length > 0 && (
+            <ProductCatalog 
+              products={scrapedData.product_catalog} 
+              title="Product Catalog" 
+            />
+          )}
 
-            {/* Hero Products */}
-            {scrapedData.hero_products && Array.isArray(scrapedData.hero_products) && scrapedData.hero_products.length > 0 && (
-              <ProductCatalog 
-                products={scrapedData.hero_products} 
-                title="Featured Products" 
-              />
+          {/* Grid Layout for Additional Info */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Social Media */}
+            {scrapedData.social_handles && (
+              <SocialMediaLinks socialHandles={scrapedData.social_handles} />
             )}
 
-            {/* Product Catalog */}
-            {scrapedData.product_catalog && Array.isArray(scrapedData.product_catalog) && scrapedData.product_catalog.length > 0 && (
-              <ProductCatalog 
-                products={scrapedData.product_catalog} 
-                title="Product Catalog" 
-              />
+            {/* Contact Details */}
+            {scrapedData.contact_details && (
+              <ContactDetails contactDetails={scrapedData.contact_details} />
             )}
 
-            {/* Grid Layout for Additional Info */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Social Media */}
-              {scrapedData.social_handles && (
-                <SocialMediaLinks socialHandles={scrapedData.social_handles} />
-              )}
+            {/* Policies */}
+            {scrapedData.policies && (
+              <PoliciesSection policies={scrapedData.policies} />
+            )}
 
-              {/* Contact Details */}
-              {scrapedData.contact_details && (
-                <ContactDetails contactDetails={scrapedData.contact_details} />
-              )}
-
-              {/* Policies */}
-              {scrapedData.policies && (
-                <PoliciesSection policies={scrapedData.policies} />
-              )}
-
-              {/* Important Links */}
-              {scrapedData.important_links && (
-                <ImportantLinks importantLinks={scrapedData.important_links} />
-              )}
-            </div>
-
-            {/* Full Width Sections */}
-            <div className="space-y-8">
-              {/* FAQs */}
-              {scrapedData.faqs && Array.isArray(scrapedData.faqs) && scrapedData.faqs.length > 0 && (
-                <FAQsSection faqs={scrapedData.faqs} />
-              )}
-
-              {/* About */}
-              {scrapedData.about_text && (
-                <AboutSection aboutText={scrapedData.about_text} />
-              )}
-            </div>
+            {/* Important Links */}
+            {scrapedData.important_links && (
+              <ImportantLinks importantLinks={scrapedData.important_links} />
+            )}
           </div>
-        </ErrorBoundary>
+
+          {/* Full Width Sections */}
+          <div className="space-y-8">
+            {/* FAQs */}
+            {scrapedData.faqs && Array.isArray(scrapedData.faqs) && scrapedData.faqs.length > 0 && (
+              <FAQsSection faqs={scrapedData.faqs} />
+            )}
+
+            {/* About */}
+            {scrapedData.about_text && (
+              <AboutSection aboutText={scrapedData.about_text} />
+            )}
+          </div>
+        </div>
       )}
 
       {/* Empty State */}

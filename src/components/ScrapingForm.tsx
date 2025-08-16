@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ScrapedData, BackendResponse } from "@/types";
+import { ScrapedData } from "@/types";
 
 interface ScrapingFormProps {
   onSubmit: (data: ScrapedData) => Promise<void>;
@@ -46,8 +46,7 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
         body: JSON.stringify({ website_url: url }),
       });
       
-      const data: BackendResponse = await response.json();
-      console.log("Raw API response:", data);
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.detail || "Something went wrong");
@@ -58,23 +57,16 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
       
       if (data.data && typeof data.data === 'object') {
         insightsData = data.data as ScrapedData;
-        console.log("Found data in 'data' field");
       } else if (data.result && typeof data.result === 'object') {
         insightsData = data.result as ScrapedData;
-        console.log("Found data in 'result' field");
       } else if (data.insights && typeof data.insights === 'object') {
         insightsData = data.insights as ScrapedData;
-        console.log("Found data in 'insights' field");
       } else if (data.brand_name || data.is_shopify !== undefined) {
         // Data is directly in the response
         insightsData = data as ScrapedData;
-        console.log("Found data directly in response");
       } else {
-        console.error("Could not find valid data structure in response:", data);
         throw new Error("Invalid data structure received from backend");
       }
-
-      console.log("Processed insights data:", insightsData);
 
       // Call onSubmit with the fetched data
       if (onSubmit && insightsData) {

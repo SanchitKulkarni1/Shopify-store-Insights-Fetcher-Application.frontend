@@ -58,10 +58,4 @@ export interface ScrapedData {
   important_links: ImportantLinks;
 }
 
-// More flexible interface for backend responses
-export interface BackendResponse {
-  data?: ScrapedData;
-  result?: ScrapedData;
-  insights?: ScrapedData;
-  [key: string]: any; // Allow additional properties
-}
+
