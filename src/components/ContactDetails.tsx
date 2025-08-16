@@ -1,13 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Phone, MapPin, Contact } from "lucide-react";
+import { ContactDetails as ContactDetailsType } from "@/types";
 
 interface ContactDetailsProps {
-  contactDetails: {
-    emails: string[];
-    phones: string[];
-    address: string | null;
-  };
+  contactDetails: ContactDetailsType;
 }
 
 export function ContactDetails({ contactDetails }: ContactDetailsProps) {

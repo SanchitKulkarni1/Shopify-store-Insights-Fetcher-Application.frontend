@@ -1,11 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
-
-interface FAQ {
-  question: string;
-  answer: string;
-}
+import { FAQ } from "@/types";
 
 interface FAQsSectionProps {
   faqs: FAQ[];

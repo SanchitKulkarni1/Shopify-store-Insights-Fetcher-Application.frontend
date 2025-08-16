@@ -1,20 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Users } from "lucide-react";
-
-interface SocialHandles {
-  instagram?: string | null;
-  facebook?: string | null;
-  tiktok?: string | null;
-  twitter?: string | null;
-  youtube?: string | null;
-  linkedin?: string | null;
-  pinterest?: string | null;
-  others?: Record<string, string>;
-}
+import { SocialHandles as SocialHandlesType } from "@/types";
 
 interface SocialMediaLinksProps {
-  socialHandles: SocialHandles;
+  socialHandles: SocialHandlesType;
 }
 
 export function SocialMediaLinks({ socialHandles }: SocialMediaLinksProps) {
@@ -29,7 +19,7 @@ export function SocialMediaLinks({ socialHandles }: SocialMediaLinksProps) {
   ];
 
   const availableLinks = socialPlatforms.filter(
-    platform => socialHandles[platform.key as keyof SocialHandles]
+    platform => socialHandles[platform.key as keyof SocialHandlesType]
   );
 
   const otherLinks = socialHandles.others ? Object.entries(socialHandles.others) : [];
@@ -69,7 +59,7 @@ export function SocialMediaLinks({ socialHandles }: SocialMediaLinksProps) {
               asChild
             >
               <a
-                href={socialHandles[platform.key as keyof SocialHandles] as string}
+                href={socialHandles[platform.key as keyof SocialHandlesType] as string}
                 target="_blank"
                 rel="noopener noreferrer"
               >

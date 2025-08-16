@@ -1,14 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Shield } from "lucide-react";
+import { Policies as PoliciesType } from "@/types";
 
 interface PoliciesProps {
-  policies: {
-    privacy_policy_url?: string | null;
-    refund_policy_url?: string | null;
-    terms_url?: string | null;
-    shipping_policy_url?: string | null;
-  };
+  policies: PoliciesType;
 }
 
 export function PoliciesSection({ policies }: PoliciesProps) {

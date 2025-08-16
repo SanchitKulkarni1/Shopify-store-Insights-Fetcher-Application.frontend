@@ -1,14 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
+import { ImportantLinks as ImportantLinksType } from "@/types";
 
 interface ImportantLinksProps {
-  importantLinks: {
-    order_tracking?: string | null;
-    contact_us?: string | null;
-    blog?: string | null;
-    others?: Record<string, string>;
-  };
+  importantLinks: ImportantLinksType;
 }
 
 export function ImportantLinks({ importantLinks }: ImportantLinksProps) {

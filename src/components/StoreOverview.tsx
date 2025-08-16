@@ -1,13 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, CheckCircle, XCircle } from "lucide-react";
+import { ScrapedData } from "@/types";
 
 interface StoreOverviewProps {
-  data: {
-    is_shopify: boolean;
-    brand_name: string;
-    base_url: string;
-  };
+  data: ScrapedData;
 }
 
 export function StoreOverview({ data }: StoreOverviewProps) {
