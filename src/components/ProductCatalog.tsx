@@ -9,8 +9,21 @@ interface ProductCatalogProps {
   showAll?: boolean;
 }
 
+// Define a map for common currency codes to symbols
+const currencySymbols: { [key: string]: string } = {
+  USD: '$',
+  INR: '₹',
+  EUR: '€',
+  GBP: '£',
+  CAD: 'C$',
+  AUD: 'A$',
+  JPY: '¥',
+  // Add common variations for Rupee
+  RS: '₹',
+  RUPEE: '₹',
+};
+
 export function ProductCatalog({ products, title, showAll = false }: ProductCatalogProps) {
-  // Safety check for products array
   if (!products || !Array.isArray(products)) {
     return (
       <Card className="shadow-card">
@@ -43,9 +56,20 @@ export function ProductCatalog({ products, title, showAll = false }: ProductCata
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {displayProducts.map((product, index) => {
-            // Safety check for individual product
             if (!product || typeof product !== 'object') {
-              return null; // Skip invalid products
+              return null;
+            }
+            
+            // ✨ 1. Default currency symbol is now Rupee '₹'
+            let symbol = '₹';
+            
+            // ✨ 2. If a currency is provided in the JSON, try to find its symbol
+            if (product.currency) {
+              const currencyUpper = product.currency.toUpperCase();
+              // If a symbol is found in our map, use it. Otherwise, the default '₹' remains.
+              if (currencySymbols[currencyUpper]) {
+                symbol = currencySymbols[currencyUpper];
+              }
             }
             
             return (
@@ -69,8 +93,9 @@ export function ProductCatalog({ products, title, showAll = false }: ProductCata
                 </h3>
                 
                 <div className="flex items-center justify-between mb-2">
+                  {/* ✨ 3. The correct symbol is now displayed */}
                   <span className="text-primary font-bold">
-                    ${product.price || '0.00'}
+                    {symbol}{product.price || '0.00'}
                   </span>
                   {product.url && (
                     <a

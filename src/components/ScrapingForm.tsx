@@ -14,6 +14,7 @@ interface ScrapingFormProps {
 
 export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
   const [url, setUrl] = useState("");
+  const [localIsLoading, setLocalIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,6 +40,8 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
       return;
     }
 
+    setLocalIsLoading(true);
+    
     try {
       const response = await fetch("http://localhost:8000/fetch-insights", {
         method: "POST",
@@ -79,6 +82,8 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
         description: error.message || "Failed to fetch insights",
         variant: "destructive",
       });
+    } finally {
+      setLocalIsLoading(false);
     }
   };
 
@@ -106,17 +111,17 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://store.myshopify.com"
                 className="pl-10 bg-white/10 border-white/20 text-foreground placeholder:text-white/60 focus:bg-white/20"
-                disabled={isLoading}
+                disabled={localIsLoading}
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
             </div>
           </div>
           <Button
             type="submit"
-            disabled={isLoading}
+            disabled={localIsLoading}
             className="w-full bg-white/20 hover:bg-white/30 text-foreground font-semibold py-3 border border-white/30 transition-all duration-300"
           >
-            {isLoading ? (
+            {localIsLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Analyzing Store...
