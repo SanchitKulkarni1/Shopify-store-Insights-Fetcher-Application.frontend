@@ -43,7 +43,7 @@ export function ScrapingForm({ onSubmit, isLoading }: ScrapingFormProps) {
     setLocalIsLoading(true);
     
     try {
-      const response = await fetch("https://shopify-store-insights-fetcher-bcvh.onrender.com/analyze", {
+      const response = await fetch("https://shopify-store-insights-fetcher-bcvh.onrender.com/fetch-insights", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ website_url: url }),
